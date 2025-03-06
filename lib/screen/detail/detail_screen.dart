@@ -49,7 +49,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       description: restaurant.description, 
                       city: restaurant.city, 
                       rating: restaurant.rating, 
-                      pictureId: restaurant.pictureId
+                      pictureId: restaurant.pictureId.substring(restaurant.pictureId.length - 2)
                       )
                     ),
                   _ => const SizedBox(),

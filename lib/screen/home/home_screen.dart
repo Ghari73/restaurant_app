@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/provider/home/restaurant_list_provider.dart';
+import 'package:restaurant_app/screen/settings/settings_screen.dart';
 import 'package:restaurant_app/static/navigation_route.dart';
 import 'package:restaurant_app/static/restaurant_list_result_state.dart';
 import 'restaurant_card_widget.dart';
@@ -27,6 +28,29 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Restaurant App"),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == "settings") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingScreen(),
+                  ),
+                );
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: "settings",
+                child: Text("Settings"),
+              ),
+            ],
+          ),
+        ],
+      ),
       body: Consumer<RestaurantListProvider>(
         builder: (context, value, child) {
           return switch (value.resultState) {
