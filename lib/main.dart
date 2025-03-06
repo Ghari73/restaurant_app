@@ -8,8 +8,10 @@ import 'package:restaurant_app/provider/favorite/local_database_provider.dart';
 import 'package:restaurant_app/provider/home/restaurant_list_provider.dart';
 import 'package:restaurant_app/provider/main/index_nav_provider.dart';
 import 'package:restaurant_app/provider/search/search_provider.dart';
+import 'package:restaurant_app/provider/settings/daily_reminder_provider.dart';
 import 'package:restaurant_app/provider/settings/theme_provider.dart';
 import 'package:restaurant_app/screen/main/main_screen.dart';
+import 'package:restaurant_app/services/notification_service.dart';
 import 'package:restaurant_app/services/theme_preferences_service.dart';
 import 'package:restaurant_app/static/navigation_route.dart';
 import 'package:restaurant_app/styles/theme/restaurant_theme.dart';
@@ -21,12 +23,18 @@ void main() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   final themeService = ThemePreferencesService(sharedPreferences);
 
+  final notificationService = NotificationService();
+  notificationService.initNotification();
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => IndexNavProvider()),
         Provider(create: (context) => ApiServices()),
         Provider(create: (context) => LocalDatabaseService()),
+        ChangeNotifierProvider(
+          create: (context) => DailyReminderProvider(),
+        ),
         ChangeNotifierProvider(
             create: (context) =>
                 LocalDatabaseProvider(context.read<LocalDatabaseService>())),
