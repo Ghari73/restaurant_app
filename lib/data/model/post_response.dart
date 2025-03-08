@@ -12,9 +12,11 @@ class PostResponse {
   });
 
   factory PostResponse.fromJson(Map<String, dynamic> json) => PostResponse(
-        error: json["error"],
-        message: json["message"],
-        customerReviews: List<CustomerReviews>.from(
-            json["customerReviews"].map((x) => CustomerReviews.fromJson(x))),
+        error: json["error"] ?? true,
+        message: json["message"] ?? '',
+        customerReviews: (json["customerReviews"] as List?)
+                ?.map((x) => CustomerReviews.fromJson(x))
+                .toList() ??
+            [],
       );
 }

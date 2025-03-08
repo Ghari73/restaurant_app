@@ -25,21 +25,24 @@ class RestaurantDetail {
 
   factory RestaurantDetail.fromJson(Map<String, dynamic> json) {
     return RestaurantDetail(
-      id: json["id"],
-      name: json["name"],
-      description: json["description"],
-      city: json["city"],
-      rating: (json["rating"] as num).toDouble(),
-      pictureId:
-          "https://restaurant-api.dicoding.dev/images/medium/${json["pictureId"]}",
-      address: json["address"],
-      categories: (json["categories"] as List)
-          .map((item) => Categories.fromJson(item))
-          .toList(),
-      menus: Menus.fromJson(json["menus"]),
-      customerReviews: (json["customerReviews"] as List)
-          .map((item) => CustomerReviews.fromJson(item))
-          .toList(),
+      id: json["id"] ?? '',
+      name: json["name"] ?? '',
+      description: json["description"] ?? '',
+      city: json["city"] ?? '',
+      rating: (json["rating"] ?? 0).toDouble(),
+      pictureId: json["pictureId"] != null
+          ? "https://restaurant-api.dicoding.dev/images/medium/${json["pictureId"]}"
+          : '', // 🔥 Perbaikan: Hindari menempelkan `null` ke string
+      address: json["address"] ?? '',
+      categories: (json["categories"] as List?)
+          ?.map((item) => Categories.fromJson(item))
+          .toList() ?? [], // 🔥 Perbaikan: Handle null List
+      menus: json["menus"] != null
+          ? Menus.fromJson(json["menus"])
+          : Menus(foods: [], drinks: []), // 🔥 Perbaikan: Hindari null
+      customerReviews: (json["customerReviews"] as List?)
+          ?.map((item) => CustomerReviews.fromJson(item))
+          .toList() ?? [], // 🔥 Perbaikan: Handle null List
     );
   }
 }
@@ -55,11 +58,14 @@ class Menus {
 
   factory Menus.fromJson(Map<String, dynamic> json) {
     return Menus(
-      foods:
-          (json["foods"] as List).map((item) => Foods.fromJson(item)).toList(),
-      drinks: (json["drinks"] as List)
-          .map((item) => Drinks.fromJson(item))
-          .toList(),
+      foods: (json["foods"] as List?)
+              ?.map((item) => Foods.fromJson(item))
+              .toList() ??
+          [], // 🔥 Perbaikan: Handle null List
+      drinks: (json["drinks"] as List?)
+              ?.map((item) => Drinks.fromJson(item))
+              .toList() ??
+          [], // 🔥 Perbaikan: Handle null List
     );
   }
 }
@@ -70,7 +76,7 @@ class Categories {
   Categories({required this.name});
 
   factory Categories.fromJson(Map<String, dynamic> json) {
-    return Categories(name: json['name']);
+    return Categories(name: json['name'] ?? ''); // 🔥 Perbaikan: Handle null
   }
 }
 
@@ -80,7 +86,7 @@ class Foods {
   Foods({required this.name});
 
   factory Foods.fromJson(Map<String, dynamic> json) {
-    return Foods(name: json['name']);
+    return Foods(name: json['name'] ?? ''); // 🔥 Perbaikan: Handle null
   }
 }
 
@@ -90,7 +96,7 @@ class Drinks {
   Drinks({required this.name});
 
   factory Drinks.fromJson(Map<String, dynamic> json) {
-    return Drinks(name: json['name']);
+    return Drinks(name: json['name'] ?? ''); // 🔥 Perbaikan: Handle null
   }
 }
 
@@ -99,12 +105,18 @@ class CustomerReviews {
   final String review;
   final String date;
 
-  CustomerReviews(
-      {required this.name, required this.review, required this.date});
+  CustomerReviews({
+    required this.name,
+    required this.review,
+    required this.date,
+  });
 
   factory CustomerReviews.fromJson(Map<String, dynamic> json) {
     return CustomerReviews(
-        name: json['name'], review: json['review'], date: json['date']);
+      name: json['name'] ?? '', // 🔥 Perbaikan: Handle null
+      review: json['review'] ?? '', // 🔥 Perbaikan: Handle null
+      date: json['date'] ?? '', // 🔥 Perbaikan: Handle null
+    );
   }
 }
 
